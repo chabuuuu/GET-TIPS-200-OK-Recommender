@@ -44,10 +44,6 @@ if __name__ == "__main__":
               coldStartStrategy="drop")
     model = als.fit(training)
 
-    predictions = model.transform(test)
-    
-    # evaluator = Evaluator(model, ratings)
-    # evaluator.calculate_metrics(predictions)    
 
     userRecs = model.recommendForAllUsers(10)
 
@@ -64,8 +60,6 @@ if __name__ == "__main__":
                 for rec in recommendations:
                     original_post_id = ratings.filter(ratings['post_id_index'] == rec['post_id_index']).select('post_id').collect()[0]['post_id']
                     post_ids.append(original_post_id)
-
-                print("POst_ids:", post_ids)
 
                 original_session_id = ratings.filter(ratings['session_id_index'] == row.session_id_index).select('session_id').collect()[0]['session_id']
 
