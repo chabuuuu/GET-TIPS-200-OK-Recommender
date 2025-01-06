@@ -7,6 +7,7 @@ from datetime import datetime
 from urllib.parse import urlparse
 import json  # Import json to handle string to JSON conversion
 import os
+from psycopg2 import pool
 
 
 from dotenv import load_dotenv
@@ -38,6 +39,11 @@ class PostLoad:
             decode_responses=True
         )
         self.redis_client = redis_client
+
+    def _connect_db(self):
+        """Get a connection from the database connection pool."""
+        return self.db_connection.get_connection()
+    
 
     def _read_csv(self):
         data = {}
@@ -100,6 +106,17 @@ class PostLoad:
             return pd.concat(all_sessions_data, ignore_index=True)
         else:
             return pd.DataFrame()  # Return empty DataFrame if no session data
+        
+    def save_data_to_redis(self, key, values):
+        """Save a list of strings as a value in Redis with the specified key."""
+        if isinstance(values, list) and all(isinstance(value, str) for value in values):
+            # Convert the list of strings to a JSON string
+            json_data = json.dumps(values)
+            # Save to Redis with TTL of 3 days (259200 seconds)
+            self.redis_client.set("RECOMMEND:" + key, json_data, ex=259200)  
+            print(f"Data saved to Redis with key: {key}")
+        else:
+            raise ValueError("The 'values' must be a list of strings.")
         
 if __name__ == "__main__":
     filePath="/home/haphuthinh/Workplace/School_project/do-an-1/Get-tips-200-ok-recommend/post.csv"
