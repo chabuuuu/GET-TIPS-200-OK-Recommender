@@ -13,11 +13,11 @@ if __name__ == "__main__":
     spark = SparkSession\
     .builder\
     .appName("ALSExample")\
-    .config("spark.driver.memory", "6g") \
-    .config("spark.executor.cores", '5')\
+    .config("spark.driver.memory", "1g") \
+    .config("spark.executor.cores", '1')\
     .getOrCreate()
 
-    postMetadataPath="/home/haphuthinh/Workplace/School_project/do-an-1/Get-tips-200-ok-recommend/post.csv"
+    postMetadataPath="./post.csv"
     
     postLoad = PostLoad(postMetadataPath)
 

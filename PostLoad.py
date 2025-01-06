@@ -112,7 +112,8 @@ class PostLoad:
         if isinstance(values, list) and all(isinstance(value, str) for value in values):
             # Convert the list of strings to a JSON string
             json_data = json.dumps(values)
-            self.redis_client.set("RECOMMEND:" + key, json_data)  # Save to Redis
+            # Save to Redis with TTL of 3 days (259200 seconds)
+            self.redis_client.set("RECOMMEND:" + key, json_data, ex=259200)  
             print(f"Data saved to Redis with key: {key}")
         else:
             raise ValueError("The 'values' must be a list of strings.")

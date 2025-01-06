@@ -1,0 +1,14 @@
+version: "3.7"
+
+services:
+  get-tips-recommender:
+    image: get-tips-recommender
+    build:
+      context: .
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 1.5G
+    env_file:
+      - .env
