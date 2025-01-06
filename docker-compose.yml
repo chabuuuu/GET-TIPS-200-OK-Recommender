@@ -2,9 +2,7 @@ version: "3.7"
 
 services:
   get-tips-recommender:
-    image: get-tips-recommender
-    build:
-      context: .
+    image: haphuthinh/get-tips-200-ok-recommender:latest
     deploy:
       resources:
         limits:
